@@ -4,7 +4,7 @@
     <meta charset='utf-8' />
     <title>Erasmus Mundus Course Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Dejan11/EMA/master/ema.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/geomundus/EMA/master/ema.ico" type="image/x-icon"/>
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
 
@@ -159,22 +159,6 @@ input#radio6{visibility:hidden;}
    transform: translateX(-50%);
 }
 
-#go-back {
-  content:url('./back-button.svg');
-  color: #fff;
-  border-radius: 5px;
-  left: 1%;
-  height: 20px;
-  width: 20px;
-  opacity: 0.79;
-  float: left;
-  margin-right: 10px;
-  display:inline-block;
-}
-
-#go-back:hover {
-  opacity: 0.99;
-}
 
 .mapbox-improve-map {
     display: none;
@@ -204,7 +188,7 @@ input#radio6{visibility:hidden;}
   width: 38px;
   height: 38px;
   border-radius: 19px;
-  background-image: url('./back-button.svg');
+  background-image: url('https://geomundus.github.io/back-button.svg');
   background-size: 38px 38px;
   background-repeat: no-repeat;
   cursor: pointer;
@@ -251,7 +235,7 @@ input#radio6{visibility:hidden;}
   width: 38px;
   height: 38px;
   border-radius: 19px;
-  background: url('close.svg') center center no-repeat;
+  background: url('https://geomundus.github.io/close.svg') center center no-repeat;
   cursor: pointer;
   opacity: 0.6;
   font-size: 13px;
@@ -286,7 +270,7 @@ input#radio6{visibility:hidden;}
 }
 
 #about-link{
-  content:url('./info.svg');
+  content:url('https://geomundus.github.io/info.svg');
   position: absolute;
   background-color: rgba(24, 24, 24, 0.0);
   z-index: 10;
@@ -305,7 +289,7 @@ input#radio6{visibility:hidden;}
 }
 
 #about-linked{
-  background-image:url('./info.svg');
+  background-image:url('https://geomundus.github.io/info.svg');
   background-size: 35px 35px;
   background-repeat: no-repeat;
   position: absolute;
@@ -382,7 +366,7 @@ img {
   visibility: visible;
 }
 #changeLayer{
-  background-image:url('./changeLayers.png');
+  background-image:url('https://geomundus.github.io/changeLayers.png');
   background-size: 35px 35px;
   background-repeat: no-repeat;
   position: absolute;
@@ -758,7 +742,7 @@ overflow: auto;
     }
 
     #about-link {
-    background: url('info.svg') center center no-repeat;
+    background: url('https://geomundus.github.io/info.svg') center center no-repeat;
     width: 26px;
     /* margin: 0px 10px; */
     height: 26px;
@@ -812,7 +796,7 @@ overflow: auto;
       width: 38px;
       height: 38px;
       border-radius: 19px;
-      background: url('close.svg') center center no-repeat;
+      background: url('https://geomundus.github.io/close.svg') center center no-repeat;
       cursor: pointer;
       opacity: 0.6;
       font-size: 13px;
@@ -903,8 +887,8 @@ overflow: auto;
     </div>
     <div id ='about-linked'></div>
   </div>
-  <div id ='banner'><img src="https://dejan11.github.io//EMA_med_map.jpg" alt="EMA"></div>
-  <div id='ema_title'><a href='http://www.em-a.eu/' style="color: white;" target='_blank'><img src="https://dejan11.github.io//EMA_med_map.jpg" alt="EMA" style="border-radius: 20px;"></a></div>
+  <div id ='banner'><img src="https://geomundus.github.io//EMA_med_map.jpg" alt="EMA"></div>
+  <div id='ema_title'><a href='http://www.em-a.eu/' style="color: white;" target='_blank'><img src="https://geomundus.github.io//EMA_med_map.jpg" alt="EMA" style="border-radius: 20px;"></a></div>
 
 <div class='map-overlay'>
 <div class='header'>
@@ -1040,7 +1024,7 @@ var json = (function () {
    $.ajax({
        'async': false,
        'global': false,
-       'url': "bycourses.geojson",
+       'url': "https://geomundus.github.io/bycourses.geojson",
        'dataType': "json",
        'success': function (data) {
            json = data;
@@ -1387,7 +1371,7 @@ function addDataLayer(){
 
   map.addSource("states", {
       "type": "geojson",
-      "data": './countryNEW.geojson'
+      "data": 'https://geomundus.github.io//countryNEW.geojson'
   });
 
   map.addLayer({
@@ -1418,7 +1402,7 @@ function addDataLayer(){
 
   map.addSource('city', {
       "type": 'geojson',
-      "data": 'bycitiesALL.geojson'
+      "data": 'https://geomundus.github.io/bycitiesALL.geojson'
   });
   map.addLayer({
       "id": "city",
@@ -1447,7 +1431,7 @@ function addDataLayer(){
 
   map.addSource('cityPHD', {
       "type": 'geojson',
-      "data": 'bycitiesPHD.geojson'
+      "data": 'https://geomundus.github.io/bycitiesPHD.geojson'
   });
   map.addLayer({
       "id": "cityPHD",
@@ -1464,7 +1448,7 @@ function addDataLayer(){
 
   map.addSource('cityMASTERS', {
       "type": 'geojson',
-      "data": 'bycitiesMasters.geojson'
+      "data": 'https://geomundus.github.io/bycitiesMasters.geojson'
   });
   map.addLayer({
       "id": "cityMASTERS",
@@ -1481,7 +1465,7 @@ function addDataLayer(){
 
     map.addSource('uni', {
         "type": 'geojson',
-        "data": './bycourses.geojson'
+        "data": 'https://geomundus.github.io/bycourses.geojson'
     });
     map.addLayer({
         "id": "uni",
