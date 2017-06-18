@@ -1,0 +1,5 @@
+# EMA
+Map of erasmus mundus programs
+<p>The Erasmus Mundus Association is a professional network for Erasmus Mundus students and graduates. This webmap serves as a search tool for graduate programs by location and links prospective students to program webpages.</p>
+      <p>There are two modes: <b><i>Program</i></b> and <b><i>City</i></b>.  The first mode allows one to filter the programs in mapview by program name and displays markers for all locations of an individual program. The second displays programs and links to individual webpages by city.<br>  The default filter for <b><i>Degree</i></b> and <b><i>Status</i></b> buttons were set with <b>All</b>, which displays both Master's and PhD programs.  To see only Master's or PhD programs, discontinued or ongoing, click on the corresponding buttons.  Discontinued programs were marked <b>D/C</b> and for the first time selected programs were marked <b>NEW</b> in the popup. For more details, please see the list of all <a href='http://eacea.ec.europa.eu/erasmus_mundus/results_compendia/selected_projects_action_1_master_courses_en.php'>Erasmus Mundus Masters Courses</a>.</p>
+     
