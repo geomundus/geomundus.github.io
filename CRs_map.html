@@ -1,0 +1,279 @@
+<!doctype html>
+<html>
+  <head>
+    <title>EMA Country Representative map</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.2.0/css/ol.css" type="text/css">
+    <!-- <link rel="stylesheet" href="../assets/css/samples.css" type="text/css" /> -->
+  </head>
+  <body>
+    <style>
+    #map{
+      width: 100%;
+      height: 100%;
+    }
+    #popup {
+    width: auto;
+    height: auto;
+    /*border-radius: 10px;*/
+    background-color: transparent;
+    /*border-style: solid;*/
+
+    }
+    #popup-content{
+      position: absolute;
+      bottom: 0;
+      width: 150px;
+      height: auto;
+      border-radius: 10px;
+      font-family: 'Verdana';
+      text-align: center;
+      padding: 5px 5px;
+      border-style:ridge;
+      border-width: 1px;
+      border-color: rgba(0,102,204,1);
+      background-color: rgba(255,255,255,.9);
+      /*background-color: transparent;*/
+
+     }
+
+    .close-thik:before {
+      content: '✖'; /* UTF-8 symbol */
+    }
+    </style>
+    <div id="information"></div>
+    <div id="map" class="map"><div id="popup">
+      <div id="popup-content"></div>
+    </div>
+    <script src="https://openlayers.org/en/v4.2.0/build/ol.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+
+
+    var ema_CRs = (function () {
+       var json = null;
+       $.ajax({
+           'async': false,
+           'global': false,
+           'url': "https://www.googleapis.com/fusiontables/v2/query?sql=SELECT * FROM 1971tqNea9guurOaf8YVTZKohW1KYXmoRmx1QoGzQ&key=AIzaSyAwhBgKGTcHqC5Zd3uVKNhGU4A0ty4Xd4o",
+           'dataType': "json",
+           'success': function (data) {
+               json = data;
+           }
+       });
+       return json;
+    })();
+// adding columns from fusion tables
+   var country = [];
+   var iso_code = [];
+   var names = [];
+   var lastnames = [];
+   var emails = [];
+
+  for (var i = 0; i < ema_CRs.rows.length; i++) {
+    country.push(ema_CRs.rows[i][0]);
+      iso_code.push(ema_CRs.rows[i][1]);
+        names.push(ema_CRs.rows[i][2]);
+          lastnames.push(ema_CRs.rows[i][3]);
+            emails.push(ema_CRs.rows[i][4]);
+  }
+
+  var ema_data = {
+    state: country,
+    iso: iso_code,
+    firstname: names,
+    surname: lastnames,
+    email: emails
+  }
+  var countriesSource = new ol.source.Vector({
+    url: 'https://raw.githubusercontent.com/geomundus/EMA_CRs/master/countries.geojson',
+    format: new ol.format.GeoJSON()
+  });
+
+  var countries = new ol.layer.Vector({
+    id: 'country',
+    source: countriesSource
+    });
+
+
+    var center = ol.proj.transform([0,30],'EPSG:4326','EPSG:3857');
+    // var extent = ol.proj.transform([-180,-90,180,90],'EPSG:4326','EPSG:3857');
+    var view = new ol.View({
+      center: center,
+      zoom: 3,
+      minZoom: 2,
+      maxZoom: 8,
+      // extent:extent
+    });
+
+    var stamen_labels = new ol.layer.Tile({
+      projection: 'EPSG3857',
+      source: new ol.source.Stamen({
+        layer: 'toner-labels'
+      })
+    });
+    var stamen_water = new ol.layer.Tile({
+      projection: 'EPSG3857',
+      source: new ol.source.Stamen({
+        layer: 'terrain-background'
+      })
+    });
+
+    var map = new ol.Map ({
+      target: 'map',
+      layers: [stamen_water,countries,stamen_labels],
+      view: view,
+    });
+
+    var baseTextstyle = {
+      font: '12px Calibri,sans-serif',
+      textAlign: 'center',
+      offsetY: -15,
+      fill: new ol.style.Fill({
+        color:[0,0,0,1]
+      }),
+      stroke: new ol.style.Stroke({
+        color: [255,255,0.5],
+        width: 4
+      })
+    };
+
+    var highlightStyle = new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: [255,0,0,0.6],
+        width: 2
+      }),
+      fill: new ol.style.Fill({
+        color: [255,0,0,0.2]
+      }),
+      zIndex: 1
+    });
+
+// style function for making up countries and interaction
+    function styleFunction(feature,resolution){
+      var style;
+      var geom = feature.getGeometry();
+      if (geom.getType() == 'Point') {
+        var text = feature.get('text');
+        baseTextstyle.text = text;
+        var isoCode = feature.get('isoCode');
+        style = new ol.style.Style({
+          text: new ol.style.Text(baseTextstyle),
+          image: new ol.style.Icon({
+            src: 'http://www.geognos.com/api/en/countries/flag/' + isoCode + '.png'
+          }),
+          zIndex: 2
+        });
+      } else {
+        style = highlightStyle;
+      }
+      return [style];
+    }
+    var featureOverlay = new ol.Overlay ({
+      map: map,
+      style: styleFunction
+    });
+
+    var popup = new ol.Overlay({
+       element: document.getElementById('popup')
+     });
+
+   map.addOverlay(popup);
+
+// styling countries on hover
+   var selectInteraction = new ol.interaction.Select({
+     condition: ol.events.condition.pointerMove,
+     toggleCondition: ol.events.condition.shiftKeyOnly,
+     layers: function (layer) {
+       return layer.get('id') == 'country';
+     },
+     style: styleFunction
+   });
+
+   map.addOverlay(popup);
+
+
+    var container = document.getElementById('popup-content');
+    var displayFeatureInfo = function(pixel, coordinate) {
+      var features = [];
+      map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+        features.push(feature);
+      });
+      if (features.length > 0) {
+        var info = [];
+        for (var i = 0, ii = features.length; i < ii; ++i) {
+          info.push(features[i].get('name'));
+          var index = ema_data.iso.indexOf(features[i].get('iso_a2'));
+
+            var inf = 'http://www.geognos.com/api/en/countries/flag/' + ema_data.iso[index] + '.png';
+            var src = '<img src="'+inf+'" width = 56 height=32>';
+        }
+        container.innerHTML = src +'<br>'+ info.join(', ') + '<br><b>' + ema_data.firstname[index] + " " + ema_data.surname[index] + '</b><br>' + ema_data.email[index];
+        popup.setPosition(coordinate);
+        $('#popup').show();
+      } else {
+        container.innerHTML = '&nbsp;';
+        $('#popup').hide();
+      }
+    };
+
+    var a = map.on('pointermove', function(evt) {
+      var coordinate = evt.coordinate;
+      displayFeatureInfo(evt.pixel, coordinate);
+    });
+    map.on('click', function(evt) {
+      map.un('pointermove');
+      var coordinate = evt.coordinate;
+      popup.setPosition(coordinate);
+      $('#popup').toggle();
+
+    });
+    // map.on('pointermove', function (e){
+
+      // featureOverlay.getFeatures().clear();
+      // var coordinate = e.coordinate;
+      // var pixel = e.pixel;
+
+      // map.forEachFeatureAtPixel(pixel,function(feature,layer){
+      //   if (!layer) {
+      //     return;
+      //   }
+      //   var geometry = feature.getGeometry();
+      //   var point;
+      //   switch (geometry.getType()) {
+      //     case 'MultiPolygon':
+      //     var poly = geometry.getPolygons().reduce(function(left,right){
+      //       return left.getArea() > right.getArea() ? left : right;
+      //     });
+      //     point = poly.getInteriorPoint().getCoordinates();
+      //     break;
+      //     case 'Polygon':
+      //       point = geometry.getInteriorPoint().getCoordinates();
+      //       break;
+      //     default:
+      //       point = geometry.getClosestPoint(coordinate);
+      //     }
+      //     var index = ema_data.iso.indexOf(feature.get('iso_a2'));
+      //
+      //     popup.setPosition(point);
+      //     popup.innerHTML = 'sdsdfsdfsd';
+
+
+          // textFeature = new ol.Feature ({
+          //   geometry: new ol.geom.Point(point),
+          //   // text: feature.get('name'),
+          //   // text: ema_CRs.rows.indexOf(feature.get('iso_a2')),
+          //   text: ema_data.firstname[index] + " " + ema_data.surname[index],
+          //   isoCode: feature.get('iso_a2')
+          //
+          //
+          // });
+          //
+          // featureOverlay.addFeature(textFeature);
+          // featureOverlay.addFeature(feature);
+        // });
+      // });
+      map.getInteractions().extend([selectInteraction]);
+    </script>
+  </body>
+</html>
