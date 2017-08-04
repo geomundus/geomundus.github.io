@@ -205,7 +205,7 @@
           info.push(features[i].get('name'));
           var index = ema_data.iso.indexOf(features[i].get('iso_a2'));
 
-            var inf = 'http://www.geognos.com/api/en/countries/flag/' + ema_data.iso[index] + '.png';
+            var inf = 'https://www.geognos.com/api/en/countries/flag/' + ema_data.iso[index] + '.png';
             var src = '<img src="'+inf+'" width = 56 height=32>';
         }
         container.innerHTML = src +'<br>'+ info.join(', ') + '<br><b>' + ema_data.firstname[index] + " " + ema_data.surname[index] + '</b><br>' + ema_data.email[index];
