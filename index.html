@@ -8,16 +8,15 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
 
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
 
-
+</head>
 <style>
-  body {
+body {
     color: #eee;
     overflow: hidden;
     background: #666;
@@ -27,7 +26,7 @@
          -ms-user-select: none;
              user-select: none;
   }
-
+/*color for backround*/
 .mapboxgl-ctrl-attrib a,.mapboxgl-ctrl-attrib { color: #ddd; }
    .mapboxgl-ctrl-attrib {
      color: #ddd; }
@@ -36,11 +35,6 @@
    .mapboxgl-ctrl {
      background: rgba(12, 12, 12, 0.5) !important;
    }
-
-  </style>
-</head>
-<style>
-
 .dropbtn {
     background-color: rgba(243,123,33, 0.88);
     color: white;
@@ -297,7 +291,8 @@ input#radio6{visibility:hidden;}
   z-index: 10;
   border-radius: 5px;
   bottom: 3%;
-  left: 1%;
+  left: 1.35%;
+  top: 20%;
   height: 35px;
   width: 35px;
   opacity: 0.7;
@@ -314,10 +309,9 @@ input#radio6{visibility:hidden;}
  left: 49%;
  top: 1%;
  right: 25%;
- /*font-size: 20px;*/
  color: white;
-
- /*padding:  10px 10px;*/
+ width: 300px;
+ height: 125px;
  opacity: .7;
  text-align:center;
  z-index:1;
@@ -342,7 +336,7 @@ img {
   z-index: 2;
   top: 2.3%;
   left: 29%;
-  height: 30px;
+  height: auto;
   padding: 7px;
   color: #ccc;
   border-radius: 5px;
@@ -359,7 +353,7 @@ img {
 }
 #changeLayer:hover{
   cursor: pointer;
-  opacity: 0.9;
+  opacity: 1;
 }
 #changeLayer:hover + #menu{
   transition-delay: 0s;
@@ -370,7 +364,7 @@ img {
   background-size: 35px 35px;
   background-repeat: no-repeat;
   position: absolute;
-  background-color: rgba(24, 24, 24, 0.0);
+  /*background-color: rgba(220, 220, 220, 1);*/
   z-index: 3;
   border-radius: 5px;
 	top: 2%;
@@ -379,6 +373,43 @@ img {
   width: 35px;
 	opacity: 0.7;
 }
+#zoom-all:hover{
+  cursor: pointer;
+  opacity: 1;
+}
+#zoom-all{
+  background-image:url('http://localhost:8000/full-extent_circ.svg');
+  background-size: 35px 35px;
+  background-repeat: no-repeat;
+  position: absolute;
+  background-color: rgba(240, 240, 240, 1);
+  z-index: 2;
+  border-radius: 20px;
+	top: 14%;
+  left: 26%;
+	height: 35px;
+  width: 35px;
+	opacity: 0.7;
+}
+#home:hover{
+  cursor: pointer;
+  opacity: 1;
+}
+#home{
+  background-image:url('http://localhost:8000/home.png');
+  background-size: 35px 35px;
+  background-repeat: no-repeat;
+  position: absolute;
+  background-color: rgba(240, 240, 240, 1);
+  z-index: 2;
+  border-radius: 20px;
+	top: 8%;
+  left: 26%;
+	height: 35px;
+  width: 35px;
+	opacity: 0.7;
+}
+
 
 #map {
     position:absolute;
@@ -486,11 +517,12 @@ img {
 .map-overlay input {
     display: block;
     z-index: 2;
-    border: none;
+    border-bottom: 2px solid;
+	font: bold 12px Arial,Helvetica,Sans-serif;
     width: 100%;
-    border-radius: 3px;
+    border-radius: 20px;
     background: rgba(12, 12, 12, 0.7);
-    padding: 10px;
+    padding: 5px 10px 5px 25px;
     margin-top: 5px;
 }
 
@@ -650,6 +682,13 @@ overflow: auto;
     #changeLayer {
       display: none
     }
+    #zoom-all{
+    	display: none;
+    }
+    #home{
+      top: 2%;
+      left: 2%;
+    }
 
     #banner{
       display: none;
@@ -671,10 +710,8 @@ overflow: auto;
      height: 50px;
      top: 1%;
      left: calc(50% - 100px);
-     /*font-size: 20px;*/
      color: white;
      border-radius: 5px;
-     /*padding:  10px 10px;*/
      opacity: .7;
      text-align:center;
      z-index:1001;
@@ -767,7 +804,7 @@ overflow: auto;
     }
 
     #about {
-      /* display: none; */
+       display: none;
       position: absolute;
       z-index: 20202020;
       background: rgba(0, 0, 0, 0.88);
@@ -788,11 +825,11 @@ overflow: auto;
     #about-close {
       border: 1px solid #eee;
       position: relative;
-      right: 5%;
+      right: 0%;
+      top: 1%;
       margin-top: 20px;
       margin-right: 20px;
       float: right;
-      top: 5%;
       width: 38px;
       height: 38px;
       border-radius: 19px;
@@ -843,6 +880,7 @@ overflow: auto;
     border-radius: 5px;
 
     }
+  }
 
 </style>
 <body>
@@ -858,27 +896,36 @@ overflow: auto;
     <div id='about-text'>
     <div id = 'about-header'>Erasmus Mundus Course Web Map</div>
       <p>The Erasmus Mundus Association is a professional network for Erasmus Mundus students and graduates. This webmap serves as a search tool for graduate programs by location and links prospective students to program webpages.</p>
-      <p>There are two modes: <b><i>Program</i></b> and <b><i>City</i></b>.  The first mode allows one to filter the programs in mapview by program name and displays markers for all locations of an individual program. The second displays programs and links to individual webpages by city.<br>  The default filter for <b><i>Degree</i></b> and <b><i>Status</i></b> buttons were set with <b>All</b>, which displays both Master's and PhD programs.  To see only Master's or PhD programs, discontinued or ongoing, click on the corresponding buttons.  Discontinued programs were marked <b>D/C</b> and for the first time selected programs were marked <b>NEW</b> in the popup. For more details, please see the list of all <a href='http://eacea.ec.europa.eu/erasmus_mundus/results_compendia/selected_projects_action_1_master_courses_en.php'>Erasmus Mundus Masters Courses</a>.</p>
+      <p>There are two modes: <b><i>Program</i></b> and <b><i>City</i></b>.
+        <ul><li>The <b><i>Program</i></b> mode allows one to filter the programs in mapview by program name and displays markers for all locations of an individual program.</li>
+        <li>The <b><i>City</i></b> displays programs and links to individual webpages by city.</li></ul>  The default filter for <b><i>Degree</i></b> and <b><i>Status</i></b> buttons were set up to <b><i>All</i></b>, which displays both Master and Doctorate programs.  <ul><li> The <b><i>Degree</i></b> button enables selection for <b><i>Masters</i></b>, <b><i>Doctorates</i></b> or <b><i>ALL</i></b> programs, and</li>
+        <li>the <b><i>Status</i></b> button enables selection for <b><i>Discontinued</i></b> or <b><i>Ongoing</i></b> programs, whereas:
+          <ul><li><b><i>Discontinued</i></b> is an indicator for programs which do not receive fundings by European Commision any longer, while</li>
+          <li><b><i>Ongoing</i></b> are active programs for the ongoing year. Totally new programs funded by European Commision first time ever were marked with <b><i>NEW</i></b></li></ul></ul>
+      For more details, please see the list of all <a href='http://eacea.ec.europa.eu/erasmus_mundus/results_compendia/selected_projects_action_1_master_courses_en.php'>Erasmus Mundus Masters Courses</a>.</p>
       <p>We hope that this program exploration tool will serve as a resource for students, faculty, and EMA staff.</p>
       <p>Read more details at <a href='http://www.em-a.eu/'>the EMA website.</a></p>
       <div id = 'about-map'><div id = 'about-map-button'>Back to the map</div></div>
       <div id='about-credits'>
         <br/>Map engine — <a target='_blank' href='https://www.mapbox.com/mapbox-gl-js/'>Mapbox GL JS</a>
-        <p><br/>Development | Data Processing | Design: <a target='_blank' href="https://de.linkedin.com/in/dejanpopovic11">Dejan Popović</a>, <a target='_blank' href="https://www.linkedin.com/in/alexander-tedeschi-4a006938">Alexander Tedeschi</a>, <a target='_blank' href="https://www.linkedin.com/in/ruxandraaelenei/">Ruxandra Aelenei</a></p>
-        <p>Contact | Feedback: <a>geomundus[et]em-a[dot]eu</a></p>
+        <p><br/>Development | Data Processing | Design: <a target='_blank' href="https://www.linkedin.com/in/alexander-tedeschi-4a006938">Alexander Tedeschi</a>, <a target='_blank' href="https://de.linkedin.com/in/dejanpopovic11">Dejan Popović</a>, <a target='_blank' href="https://www.linkedin.com/in/ruxandraaelenei/">Ruxandra Aelenei</a></p>
+        <br/>Contact | Feedback: geomundus[et]em-a[dot]eu, Dejan Popovic, GeoMundus Network</p>
     </div>
   </div>
 </div>
 </div>
 
+<div id='home'></div>
+<div id='zoom-all'></div>
 <div id='changeLayer'></div>
 <div id='menu'>
-  <input id='light' type='radio' name='rtoggle' value='light'>
-  <label for='light'>light</label>
+  <input id='bright' type='radio' name='rtoggle' value='bright' checked='checked'>
+  <label for='bright'>basic</label><br>
   <input id='dark' type='radio' name='rtoggle' value='dark'>
   <label for='dark'>dark</label>
-  <input id='bright' type='radio' name='rtoggle' value='bright' checked='checked'>
-  <label for='bright'>streets</label>
+  <!-- <br><input id='light' type='radio' name='rtoggle' value='light'>
+  <label for='light'>light</label> -->
+
 </div>
 
   <div id='map'>
@@ -934,7 +981,7 @@ overflow: auto;
 
 </div>
     <fieldset>
-        <input id='feature-filter' type='text' placeholder='Filter results by program or abbreviation name' />
+        <input id='feature-filter' type='text' placeholder='🔍 Filter results by program or abbreviation name' />
     </fieldset>
     <div id='feature-listing' class='listing'></div>
 </div>
@@ -1017,7 +1064,189 @@ var map = new mapboxgl.Map({
     maxZoom: 9,
     minZoom: 1,
 });
+function addDataLayer(){
 
+  var zoomThreshold = 4;
+
+  map.addSource("states", {
+      "type": "geojson",
+      "data": 'https://geomundus.github.io/countryNEW.geojson'
+  });
+
+  map.addLayer({
+      "id": "state-fills",
+      "type": "fill",
+      "source": "states",
+      "layout": {
+        "visibility": "visible",
+      },
+      "paint": {
+          "fill-color": "#627BC1",
+          "fill-opacity": 0.0
+      }
+  });
+
+  map.addLayer({
+      "id": "state-border-hover",
+      "type": "line",
+      "source": "states",
+      "layout": {},
+      "paint": {
+          "line-color": "#627BC1",
+          "line-opacity": 0.5,
+          "line-width": 3
+      },
+      "filter": ["==", "admin", ""]
+  });
+
+  map.addSource('city', {
+      "type": 'geojson',
+      "data": 'https://geomundus.github.io/bycitiesALL.geojson'
+  });
+  map.addLayer({
+      "id": "city",
+      "type": "symbol",
+      "source": "city",
+      "layout":{
+        "visibility": "none",
+        "icon-image": "marker-15_blackwhite",
+        "icon-offset": [0, -7.5],
+        "icon-allow-overlap": true,
+        "icon-size":.8
+      }
+  });
+  map.addLayer({
+      "id": "city_select",
+      "type": "symbol",
+      "source": "city",
+      "layout":{
+        "visibility": "none",
+        "icon-image": "marker_red",
+        "icon-offset": [0, -7.5],
+        "icon-allow-overlap": true,
+        /*"icon-size":.8*/
+      }
+  });
+
+  map.addSource('cityPHD', {
+      "type": 'geojson',
+      "data": 'https://geomundus.github.io/bycitiesPHD.geojson'
+  });
+  map.addLayer({
+      "id": "cityPHD",
+      "type": "symbol",
+      "source": "cityPHD",
+      "layout":{
+        "visibility": "none",
+        "icon-image": "marker-15_blackwhite",
+        "icon-offset": [0, -7.5],
+        "icon-allow-overlap": true,
+        "icon-size":.8
+      }
+  });
+
+  map.addSource('cityMASTERS', {
+      "type": 'geojson',
+      "data": 'https://geomundus.github.io/bycitiesMasters.geojson'
+  });
+  map.addLayer({
+      "id": "cityMASTERS",
+      "type": "symbol",
+      "source": "cityMASTERS",
+      "layout":{
+        "visibility": "none",
+        "icon-image": "marker-15_blackwhite",
+        "icon-offset": [0, -7.5],
+        "icon-allow-overlap": true,
+        "icon-size":.8
+      }
+  });
+
+    map.addSource('uni', {
+        "type": 'geojson',
+        "data": 'https://geomundus.github.io/bycourses.geojson'
+    });
+    map.addLayer({
+        "id": "uni",
+        "type": "symbol",
+        "source": "uni",
+        "layout":{
+          "visibility": "visible",
+          "icon-image": "marker-15_blackwhite",
+          "icon-offset": [0, -7.5],
+          "icon-allow-overlap": true,
+          "icon-size":0.8
+        }
+    });
+
+    map.addLayer({
+        "id": "uni_select",
+        "type": "symbol",
+        "source": "uni",
+        "layout":{
+          "visibility": "none",
+          "icon-image": "marker_red",
+          /*"icon-image":"marker-color",*/
+          "icon-offset": [0, -7.5],
+          "icon-allow-overlap": true,
+        },
+        "filter": ["==", "code", ""]
+    });
+
+    map.addLayer({
+        "id": "point",
+        "type": "circle",
+        "source": "uni",
+        "layout":{
+          "visibility": "none",
+        },
+        "paint": {
+            "circle-radius": initialRadius,
+            "circle-radius-transition": {duration: 0},
+            "circle-opacity-transition": {duration: 0},
+            "circle-color": "#283048"
+
+        },
+        "filter": ["==", "code", ""]
+    });
+
+
+    map.addLayer({
+    "id": "point1",
+    "source": "uni",
+    "type": "circle",
+    "layout":{
+      "visibility": "none",
+    },
+    "paint": {
+        "circle-radius": initialRadius,
+        "circle-color": "#283048"
+    },
+    "filter": ["==", "code", ""]
+});
+
+    map.addLayer({
+        "id": "uni_icon",
+        "type": "symbol",
+        "source": "uni",
+        "layout":{
+          "visibility": "none",
+          "icon-image": "marker_red",
+          "icon-offset": [0, -7.5],
+          "icon-allow-overlap": true,
+          "icon-size": 1.2
+        },
+        "filter": ["==", "code", ""]
+    });
+
+}
+
+
+map.on('style.load', function (e) {
+
+   addDataLayer();
+
+   });
 /*loading program geojson*/
 var json = (function () {
    var json = null;
@@ -1038,6 +1267,8 @@ var acro_title = json.features.reduce(function(acro_title,item){
 acro_title[item.properties.code]=item.properties.title;
   return acro_title;
 },{});
+
+
 /*add empty programs array*/
 
 var programs = [];
@@ -1071,7 +1302,7 @@ function renderListings(features) {
                 if (str === 1 ) {
                   return ""
               } else {
-                  return "D/C"
+                  return "Discontinued"
               }
             }
 
@@ -1191,15 +1422,15 @@ function renderListings(features) {
             });
 /*City mode - display links and add popup on hover*/
 
-            item.addEventListener('mouseout', function() {
+            /*item.addEventListener('mouseout', function() {
                 map.setLayoutProperty('city_select', 'visibility', 'none');
-             });
+             });*/
 
             item.addEventListener('mouseover', function() {
 
                 var cityFilter =  prop.city
-                map.setFilter("city_select", ["==", "code", cityFilter]);
-                map.setLayoutProperty('city_select', 'visibility', 'visible');
+                /*map.setFilter("city_select", ["==", "code", cityFilter]);
+                map.setLayoutProperty('city_select', 'visibility', 'visible');*/
 
 /*Get all links from properties and put them in the popup!*/
   function htmlFromProps(props) {
@@ -1254,7 +1485,7 @@ function renderListings(features) {
  /*popup einstellung fuer city von feature-listing*/
                 function hideUndf(str) {
                   if (str == undefined) {
-                    return "D/C"
+                    return "Discontinued"
                 } else if (str == 1){
                     return ""
                 } else {
@@ -1365,188 +1596,7 @@ var initialRadius = 3;
 var radius = initialRadius;
 var maxRadius = 18;
 
-function addDataLayer(){
 
-  var zoomThreshold = 4;
-
-  map.addSource("states", {
-      "type": "geojson",
-      "data": 'https://geomundus.github.io//countryNEW.geojson'
-  });
-
-  map.addLayer({
-      "id": "state-fills",
-      "type": "fill",
-      "source": "states",
-      "layout": {
-        "visibility": "visible",
-      },
-      "paint": {
-          "fill-color": "#627BC1",
-          "fill-opacity": 0.0
-      }
-  });
-
-  map.addLayer({
-      "id": "state-border-hover",
-      "type": "line",
-      "source": "states",
-      "layout": {},
-      "paint": {
-          "line-color": "#627BC1",
-          "line-opacity": 0.5,
-          "line-width": 3
-      },
-      "filter": ["==", "admin", ""]
-  });
-
-  map.addSource('city', {
-      "type": 'geojson',
-      "data": 'https://geomundus.github.io/bycitiesALL.geojson'
-  });
-  map.addLayer({
-      "id": "city",
-      "type": "symbol",
-      "source": "city",
-      "layout":{
-        "visibility": "none",
-        "icon-image": "marker-15_blackwhite",
-        "icon-offset": [0, -7.5],
-        "icon-allow-overlap": true,
-        "icon-size":.8
-      }
-  });
-  map.addLayer({
-      "id": "city_select",
-      "type": "symbol",
-      "source": "city",
-      "layout":{
-        "visibility": "none",
-        "icon-image": "marker_red",
-        "icon-offset": [0, -7.5],
-        "icon-allow-overlap": true,
-        /*"icon-size":.8*/
-      }
-  });
-
-  map.addSource('cityPHD', {
-      "type": 'geojson',
-      "data": 'https://geomundus.github.io/bycitiesPHD.geojson'
-  });
-  map.addLayer({
-      "id": "cityPHD",
-      "type": "symbol",
-      "source": "cityPHD",
-      "layout":{
-        "visibility": "none",
-        "icon-image": "marker-15_blackwhite",
-        "icon-offset": [0, -7.5],
-        "icon-allow-overlap": true,
-        "icon-size":.8
-      }
-  });
-
-  map.addSource('cityMASTERS', {
-      "type": 'geojson',
-      "data": 'https://geomundus.github.io/bycitiesMasters.geojson'
-  });
-  map.addLayer({
-      "id": "cityMASTERS",
-      "type": "symbol",
-      "source": "cityMASTERS",
-      "layout":{
-        "visibility": "none",
-        "icon-image": "marker-15_blackwhite",
-        "icon-offset": [0, -7.5],
-        "icon-allow-overlap": true,
-        "icon-size":.8
-      }
-  });
-
-    map.addSource('uni', {
-        "type": 'geojson',
-        "data": 'https://geomundus.github.io/bycourses.geojson'
-    });
-    map.addLayer({
-        "id": "uni",
-        "type": "symbol",
-        "source": "uni",
-        "layout":{
-          "visibility": "visible",
-          "icon-image": "marker-15_blackwhite",
-          "icon-offset": [0, -7.5],
-          "icon-allow-overlap": true,
-          "icon-size":.8
-        }
-    });
-
-    map.addLayer({
-        "id": "uni_select",
-        "type": "symbol",
-        "source": "uni",
-        "layout":{
-          "visibility": "none",
-          "icon-image": "marker_red",
-          /*"icon-image":"marker-color",*/
-          "icon-offset": [0, -7.5],
-          "icon-allow-overlap": true,
-        },
-        "filter": ["==", "code", ""]
-    });
-
-    map.addLayer({
-        "id": "point",
-        "type": "circle",
-        "source": "uni",
-        "layout":{
-          "visibility": "none",
-        },
-        "paint": {
-            "circle-radius": initialRadius,
-            "circle-radius-transition": {duration: 0},
-            "circle-opacity-transition": {duration: 0},
-            "circle-color": "#283048"
-
-        },
-        "filter": ["==", "code", ""]
-    });
-
-
-    map.addLayer({
-    "id": "point1",
-    "source": "uni",
-    "type": "circle",
-    "layout":{
-      "visibility": "none",
-    },
-    "paint": {
-        "circle-radius": initialRadius,
-        "circle-color": "#283048"
-    },
-    "filter": ["==", "code", ""]
-});
-
-    map.addLayer({
-        "id": "uni_icon",
-        "type": "symbol",
-        "source": "uni",
-        "layout":{
-          "visibility": "none",
-          "icon-image": "marker_red",
-          "icon-offset": [0, -7.5],
-          "icon-allow-overlap": true,
-          "icon-size": 1.2
-        },
-        "filter": ["==", "code", ""]
-    });
-
-}
-
-/*Resets to Program Mode when style is changed*/
-map.on('style.load', function (e) {
-  addDataLayer();
-
-});
 function animateMarker(timestamp) {
     setTimeout(function(){
         requestAnimationFrame(animateMarker);
@@ -1569,7 +1619,6 @@ animateMarker(0);
 
 /*Create hover effect with countries*/
 map.on('load', function () {
-
  map.on("mousemove", function(e) {
       var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
       if (features.length) {
@@ -1600,47 +1649,46 @@ var inputs = layerList.getElementsByTagName('input');
 
 function switchLayer(layer) {
     var layerId = layer.target.id;
+    var color_layer = document.getElementById('changeLayer');
+    var color_menu = document.getElementById('menu');
+    var program = document.getElementById('program');
     if (layerId === "light"){
 
-    var program = document.getElementById('program');
     program.className = 'mode-selected'
     var city = document.getElementById('city');
       city.className = 'mode'
 
-    var color = document.getElementById('changeLayer');
-/*file path*/
-    map.setStyle('mapbox://styles/geomundus/cj3vxsxtf0jai2rkb4z7lc2qj');
-    color.style.backgroundColor = `rgba(24, 24, 24, 0.0)`;
+/*file path, light not changed*/
+    map.setStyle('mapbox://styles/geomundus/cj3vwvvn50ifz2smn81uiksw9');
+    color_layer.style.backgroundColor = `rgba(24, 24, 24, 0.0)`;
 /*getting checked radio box*/
     prgAll.checked = true;
     ongAll.checked = true;
 } else if (layerId === "dark"){
 
-  var program = document.getElementById('program');
   program.className = 'mode-selected'
   var city = document.getElementById('city');
     city.className = 'mode'
-
-    var color = document.getElementById('changeLayer');
 /*file path*/
-    map.setStyle('mapbox://styles/geomundus/cj3vxugy40i2b2sjy3i1fd2bi');
-    color.style.backgroundColor = `rgba(240, 240, 240, 0.2)`;
+    map.setStyle('mapbox://styles/geomundus/cj4k9343e2zk92rmi9cq8kzoh');
+    color_layer.style.backgroundColor = `rgba(240, 240, 240, 1)`;
+    color_menu.style.backgroundColor = `rgba(240, 240, 240, .7)`;
+    color_menu.style.color = 'black';
 /*getting checked radio box*/
     prgAll.checked = true;
     ongAll.checked = true;
 
 } else if (layerId === "bright"){
 
-  var program = document.getElementById('program');
   program.className = 'mode-selected'
   var city = document.getElementById('city');
     city.className = 'mode'
 
-  var color = document.getElementById('changeLayer');
-  color.style.backgroundColor = `rgba(24, 24, 24, 0.0)`;
+  color_layer.style.backgroundColor = `rgba(24, 24, 24, 0.0)`;
+  color_menu.style.backgroundColor = 'rgba(24, 24, 24, 0.9)';
+  color_menu.style.color = '#ccc';
 /*file path*/
-  map.setStyle('mapbox://styles/geomundus/cj3w5i7500prz2sodhhtd2z1p');
-  /*map.setStyle('mapbox://styles/geomundus/cj3w533hv0pc22so4p1p17nce');*/
+  map.setStyle('mapbox://styles/geomundus/cj4b2b6pk43hm2rmpu7q9kil3');
 /*getting checked radio box*/
   prgAll.checked = true;
   ongAll.checked = true;
@@ -1656,6 +1704,7 @@ console.log(inputs);
 for (var i = 0; i < inputs.length; i++) {
     inputs[i].onclick = switchLayer;
 }
+
 
 var delayMillis = 100;
 
@@ -1709,7 +1758,7 @@ setTimeout(function() {
 
           if (city.className ===  'mode') {
             city.className = 'mode-selected'
-            ff.placeholder = 'Filter results by city name'
+            ff.placeholder = '🔍 Filter results by city name'
             program.className = 'mode'
             map.setLayoutProperty('uni', 'visibility', 'none');
             map.setLayoutProperty('uni_select', 'visibility', 'none');
@@ -1733,7 +1782,7 @@ setTimeout(function() {
           } else {console.log("fail")}
         } else {
 
-          ff.placeholder = 'Filter results by city name'
+          ff.placeholder = '🔍 Filter results by city name'
           program.className = 'mode'
           document.getElementById("program_title").style.display = "none";
 
@@ -1806,7 +1855,7 @@ setTimeout(function() {
             if (program.className === 'mode') {
               program.className = 'mode-selected'
               city.className = 'mode'
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('city', 'visibility', 'none');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
@@ -1890,7 +1939,7 @@ setTimeout(function() {
             if(degree === 'All'){
 
               map.setFilter('uni', ['!=', 'ongoing2015_2017', 1])
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1899,7 +1948,7 @@ setTimeout(function() {
 
               var new_Filter = ["all",["!=", 'ongoing2015_2017', 1],["==", 'cat', 'EMJMD']];
               map.setFilter('uni', new_Filter)
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1908,7 +1957,7 @@ setTimeout(function() {
 
               var new_Filter = ["all",["!=", 'ongoing2015_2017', 1],["==", 'cat', 'EMJD']];
               map.setFilter('uni', new_Filter)
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1919,7 +1968,7 @@ setTimeout(function() {
 
           if(degree === 'All'){
               map.setFilter('uni', ['==', 'ongoing2015_2017', 1])
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1928,7 +1977,7 @@ setTimeout(function() {
 
               var new_Filter = ["all",["==", 'ongoing2015_2017', 1],["==", 'cat', 'EMJMD']];
               map.setFilter('uni', new_Filter)
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1937,7 +1986,7 @@ setTimeout(function() {
 
               var new_Filter = ["all",["==", 'ongoing2015_2017', 1],["==", 'cat', 'EMJD']];
               map.setFilter('uni', new_Filter)
-              ff.placeholder = 'Filter results by program or abbreviation name'
+              ff.placeholder = '🔍 Filter results by program or abbreviation name'
               map.setLayoutProperty('uni', 'visibility', 'visible');
               map.setLayoutProperty('uni_select', 'visibility', 'none');
               map.setLayoutProperty('city', 'visibility', 'none');
@@ -1949,7 +1998,7 @@ setTimeout(function() {
             if(degree === 'All'){
 /* selection of whole features "3" doesn't mean anyting*/
                 map.setFilter('uni', ['!=', 'ongoing2015_2017', 3])
-                ff.placeholder = 'Filter results by program or abbreviation name'
+                ff.placeholder = '🔍 Filter results by program or abbreviation name'
                 map.setLayoutProperty('uni', 'visibility', 'visible');
                 map.setLayoutProperty('uni_select', 'visibility', 'none');
                 map.setLayoutProperty('city', 'visibility', 'none');
@@ -1958,14 +2007,14 @@ setTimeout(function() {
 
                 var new_Filter = ["all",["==", 'cat', 'EMJMD']];
                 map.setFilter('uni', new_Filter)
-                ff.placeholder = 'Filter results by program or abbreviation name'
+                ff.placeholder = '🔍 Filter results by program or abbreviation name'
                 map.setLayoutProperty('uni', 'visibility', 'visible');
                 map.setLayoutProperty('uni_select', 'visibility', 'none');
                 map.setLayoutProperty('city', 'visibility', 'none');
 
               } else {
                 map.setFilter('uni', ["==", 'cat', 'EMJD'])
-                ff.placeholder = 'Filter results by program or abbreviation name'
+                ff.placeholder = '🔍 Filter results by program or abbreviation name'
                 map.setLayoutProperty('uni', 'visibility', 'visible');
                 map.setLayoutProperty('uni_select', 'visibility', 'none');
                 map.setLayoutProperty('city', 'visibility', 'none');
@@ -1989,7 +2038,7 @@ setTimeout(function() {
 
               sorted = uniqueFeatures.sort(compare);
               renderListings(sorted);
-              programs = sortedSS
+              programs = sorted
                   };
 
               }, delayMillis);
@@ -2020,7 +2069,7 @@ setTimeout(function() {
 /*getting map layers when we are checking radio buttons in degree mode*/
               if (degree === 'Masters'){
               if(program.className === 'mode-selected'){
-                ff.placeholder = 'Filter results by program or abbreviation name'
+                ff.placeholder = '🔍 Filter results by program or abbreviation name'
 
                 if (ongoing === 'Ongoing'){
                 var new_Filter = ["all",["==", 'ongoing2015_2017', 1],["==", 'cat', 'EMJMD']];
@@ -2043,7 +2092,7 @@ setTimeout(function() {
 
               } else {
 
-                ff.placeholder = 'Filter results by city name'
+                ff.placeholder = '🔍 Filter results by city name'
                 map.setLayoutProperty('city', 'visibility', 'none');
                 map.setLayoutProperty('cityPHD', 'visibility', 'none');
                 map.setLayoutProperty('cityMASTERS', 'visibility', 'visible');
@@ -2078,7 +2127,7 @@ setTimeout(function() {
           } else if (degree === 'All'){
 
       if(program.className === 'mode-selected'){
-      ff.placeholder = 'Filter results by program or abbreviation name'
+      ff.placeholder = '🔍 Filter results by program or abbreviation name'
 
         if(ongoing === 'Discontinued'){
               map.setFilter('uni', ['!=', 'ongoing2015_2017', 1])}
@@ -2093,7 +2142,7 @@ setTimeout(function() {
               map.setLayoutProperty('city', 'visibility', 'none');
 
             } else {
-              ff.placeholder = 'Filter results by city name'
+              ff.placeholder = '🔍 Filter results by city name'
               map.setLayoutProperty('city', 'visibility', 'visible');
               map.setLayoutProperty('cityPHD', 'visibility', 'none');
               map.setLayoutProperty('cityMASTERS', 'visibility', 'none');
@@ -2129,7 +2178,7 @@ setTimeout(function() {
 
             var new_Filter = ["==", 'cat', 'EMJMD'];
             map.setFilter("uni", new_Filter)
-            ff.placeholder = 'Filter results by program or abbreviation name'
+            ff.placeholder = '🔍 Filter results by program or abbreviation name'
             map.setLayoutProperty('uni', 'visibility', 'visible');
             map.setLayoutProperty('city', 'visibility', 'none');
             map.setLayoutProperty('uni_select', 'visibility', 'none');
@@ -2171,7 +2220,7 @@ setTimeout(function() {
 
             var new_Filter = ["all",["!=", 'ongoing2015_2017', 1],["==", 'cat', 'EMJMD']];
             map.setFilter('uni', new_Filter)
-            ff.placeholder = 'Filter results by program or abbreviation name'
+            ff.placeholder = '🔍 Filter results by program or abbreviation name'
             map.setLayoutProperty('uni', 'visibility', 'visible');
             map.setLayoutProperty('city', 'visibility', 'none');
             map.setLayoutProperty('uni_select', 'visibility', 'none');
@@ -2344,6 +2393,28 @@ setTimeout(function() {
           }
         )
       };
+      // on click zoom all extent
+      document.getElementById('zoom-all').addEventListener('click', function () {
+        map.flyTo({
+            center:[0, 40],
+            zoom: 1.5
+          });
+      });
+      // on click go back to home
+      document.getElementById('home').addEventListener('click', function () {
+        prgAll.checked = true;
+        ongAll.checked = true;
+        map.setFilter('uni', ['!=', 'cat', 'fff']);
+        map.setLayoutProperty('uni', 'visibility', 'visible');
+        map.setLayoutProperty('uni_select', 'visibility', 'none');
+        map.setLayoutProperty('uni_icon', 'visibility', 'none');
+        map.setLayoutProperty('point', 'visibility', 'none');
+        map.setLayoutProperty('point1', 'visibility', 'none');
+        map.flyTo({
+            center:[15.2551, 50.5260],
+            zoom: 3
+          });
+      });
 /*closes left panel*/
 
         document.getElementById('interest-close').addEventListener('click', function () {
@@ -2692,7 +2763,7 @@ var feature = features[0];
   }
     function hideUndf(str) {
       if (str == undefined) {
-        return "D/C"
+        return "Discontinued"
     } else if (str == 1){
         return ""
     } else {
