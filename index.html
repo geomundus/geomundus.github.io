@@ -378,7 +378,7 @@ img {
   opacity: 1;
 }
 #zoom-all{
-  background-image:url('geomundus.github.io/full-extent_circ.svg');
+  background-image:url('http://localhost:8000/full-extent_circ.svg');
   background-size: 35px 35px;
   background-repeat: no-repeat;
   position: absolute;
@@ -396,7 +396,7 @@ img {
   opacity: 1;
 }
 #home{
-  background-image:url('geomundus.github.io/home.png ');
+  background-image:url('http://localhost:8000/home.png');
   background-size: 35px 35px;
   background-repeat: no-repeat;
   position: absolute;
@@ -485,10 +485,17 @@ img {
   background: rgba(0, 128, 225, 1);
 }
 
-.mode:hover, .mode:active,
+.mode-selected:hover{
+  background: rgba(0, 90, 225, .9);
+}
+.mode:hover{
+  background: rgba(70, 70, 70, 1);
+}
+
+/*.mode:hover, .mode:active,
 .mode-selected:hover, .mode-selected:active {
     color: #fff;
-}
+}*/
 
 .map-overlay {
     position: absolute;
@@ -666,10 +673,17 @@ overflow: auto;
         background: rgba(0, 128, 225, 1);
       }
 
-      .mode:hover, .mode:active,
+      .mode-selected:hover{
+        background: rgba(0, 90, 225, .9);
+      }
+      .mode:hover{
+        background: rgba(70, 70, 70, 1);
+      }
+
+      /*.mode:hover, .mode:active,
       .mode-selected:hover, .mode-selected:active {
           color: #fff;
-      }
+      }*/
 
     #map {
         position: relative!important;
