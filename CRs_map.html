@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.2.0/css/ol.css" type="text/css">
     <!-- <script type="text/javascript" src="./src/node_modules/proj4/dist/proj4.js"></script> -->
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
   </head>
   <body>
@@ -12,7 +13,7 @@
     #map{
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 0;
     }
     #popup-content{
       min-width: 15em;
@@ -27,11 +28,38 @@
       border-color: #646566;
       background-color: #FAF8F8;
       /*background-color: transparent;*/
-      box-shadow: 10px -10px 10px  #888888;
-      z-index: 0;
+      box-shadow: 5px -5px 6px  #888888;
+      z-index: 2;
       /* opacity: 1; */
 
      }
+     .ol-popup {
+        position: absolute;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+      }
+     .ol-popup:after, .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+    .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+    }
+    .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+    }
 
     .close-thik:before {
       content: '✖'; /* UTF-8 symbol */
@@ -39,25 +67,50 @@
     div > .ol-zoom{
       top:40%;
     }
-    td:first-child{
+    .ol-popup td:first-child{
       text-align: right;
     }
-    th, td {
+    .ol-popup th, td {
       border-bottom: 1px solid #ddd;
-  }
-  tr:hover {background-color: #f5f5f5}
+    }
+    .ol-popup tr:hover {background-color: #f5f5f5}
+    
+    #legend{
+      border: 1px solid silver;
+      position: absolute;
+      width: auto;
+      height: auto;
+      top: 3%;
+      right: 3%;
+      background-color: white;
+      z-index: 1;
+      font-size: 13px;
+      font-family:Arial, Helvetica, sans-serif;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 2px -2px 4px  #888888;
+ 
+    }
+    td{
+      min-width: 20px;
+    }
     </style>
-    <div id="information"></div>
-    <div id="map" class="map"><div id="popup">
-      <div id="popup-content"></div>
-      <div id="logo"><a href="http://www.em-a.eu" target="_blank"><img src="http://www.em-a.eu/fileadmin/system/templates/images/logo_ema.gif"></a></div>
+
+    <div id="map" class="map">
+      <div id="legend"></div>
+      <div id="popup" class="ol-popup">
+        <div id="popup-content"></div>
+        <div id="logo"><a href="http://www.em-a.eu" target="_blank"><img src="http://www.em-a.eu/fileadmin/system/templates/images/logo_ema.gif"></a></div>
     </div>
+
     <script src="https://openlayers.org/en/v4.2.0/build/ol-debug.js" type="text/javascript"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script>
+
+
     // let epsg54030 = proj4.defs('ROBISON','+proj=robin +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
     //let epsg54030 = 'PROJCS["World_Robinson",GEOGCS["GCS_WGS_1984",DATUM["WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Robinson"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["Central_Meridian",0],UNIT["Meter",1],AUTHORITY["EPSG","54030"]]';
-
+// using ajax to get fusion table json
     var ema_CRs = (function () {
        var json = null;
        $.ajax({
@@ -103,50 +156,67 @@
     source: countriesSource
     });
   
-  let colorList = ["yellow","darkgreen","lightblue","lightyellow","darkolivegreen","bisque","greenyellow","purple","darkkhaki","lightsalmon","lawngreen", "aliceblue","coral"];
+  let colorList = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928', "#ffffb3"];
   let color;
+  let chapterColor={};
+
+// creating Fill function which takes feature and associates colors to chapters
   let Fill = function (feature){
-      
-    if (feature.get('chapter')==="South Asian"){
       color = colorList[0];
+    if (feature.get('chapter')==="South Asian"){
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="African") {
       color = colorList[1];
+      chapterColor[feature.get('chapter')]=color;
     }else if(feature.get('chapter')==='European'){
       color = colorList[2];
+      chapterColor[feature.get('chapter')]=color;
     }else if(feature.get('chapter')==="Asian"){
       color = colorList[3];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="Middle East"){
       color = colorList[4];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="Eurasian"){
       color = colorList[5];
+      chapterColor[feature.get('chapter')]=color;
     }else if(feature.get('chapter')==="Chinese"){
       color = colorList[6];
+      chapterColor[feature.get('chapter')]=color;
     }else if(feature.get('chapter')==="Far East"){
       color = colorList[7];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="Indian"){
       color = colorList[8];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="Latin American"){
       color = colorList[9];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="North American"){
       color = colorList[10];
+      chapterColor[feature.get('chapter')]=color;
     }else if (feature.get('chapter')==="South-East Asian"){
       color = colorList[11];
+      chapterColor[feature.get('chapter')]=color;
    }else if (feature.get('chapter')=== "Oceania"){
      color = colorList[12];
+     chapterColor[feature.get('chapter')]=color;
    }
-   return new ol.style.Style({ fill: new ol.style.Fill({ color: color})});
+   return new ol.style.Style({fill:new ol.style.Fill({ color: color})});
   }
-
+// making chapters layer using style function Fill
   var chapters = new ol.layer.Vector({
     id: 'chapters',
     source: countriesSource,
     style: Fill,
-    opacity: .5
+    //  new ol.style.Style({
+      // fill: 
+    // }),
+    opacity: 0.6
     });
-    
-    // var center = proj4(epsg54030,([0,30])); 
+
     let center = ol.proj.transform([0,30],'EPSG:4326','EPSG:3857');
-    // let extent = ol.proj.transformExtent([-170, -53, 180, 77], 'EPSG:4326','EPSG:3857');
+
     let extent = ol.proj.transformExtent([0,15,20,20], 'EPSG:4326','EPSG:3857');
     var view = new ol.View({
       center: center,
@@ -171,8 +241,9 @@
 
     var map = new ol.Map ({
       target: 'map',
-      layers: [countries, chapters, stamen_labels],
+      layers: [countries, chapters,stamen_labels],
       view: view,
+      controls: ol.control.defaults({zoom:false})
     });
 
     var baseTextstyle = {
@@ -194,7 +265,7 @@
         width: 2
       }),
       fill: new ol.style.Fill({
-        color: [255,0,0,0.2]
+        color: color
       }),
       zIndex: 1
     });
@@ -231,12 +302,13 @@
    var selectInteraction = new ol.interaction.Select({
      condition: ol.events.condition.pointerMove,
      toggleCondition: ol.events.condition.shiftKeyOnly,
-     layers: function (layer) {
+     layers: function (layer) { //layer.set('opacity','0.6');
        return layer.get('id') == 'country';
      },
-     style: styleFunction
+     style: chapters.getStyle()
    });
 
+//emal function
    function emailto(name, email){
      let status;
      if (name==='Vacant' && email===''){
@@ -248,7 +320,9 @@
      }
      return status;
    }
-    //definition for status of CRs
+
+
+//definition for status of CRs
     var container = document.getElementById('popup-content');
     var displayFeatureInfo = function(pixel, coordinate) {
       var features = [];
@@ -256,7 +330,6 @@
       map.removeOverlay(popup);
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         features.push(feature);
-        // console.log(feature.get('chapter').length);
 
         for (var i = 0, ii = features.length; i < ii; ++i) {
        
@@ -279,21 +352,16 @@
       });
     };
 
-    // map.on('pointermove', function(evt) {
-    //   var coordinate = evt.coordinate;
-      
-    // });
+// on lick adding pop up and pan move
     map.on('click', function(evt) {
       displayFeatureInfo(evt.pixel, coordinate);
       var coordinate = evt.coordinate;
       popup.setPosition(coordinate);
       let currentView = map.getView();
-      // currentView.set("center", coordinate);
+      currentView.animate({center: coordinate},{duration:2000});
 
     });
-    // $('#popup-content').on('mouseover', function(){
-    //   ol.Observable.unByKey('pointermove');
-    // })
+
     var logo = new ol.Overlay({
        element: document.getElementById('logo'),
        position: ol.proj.transform([-170,0], 'EPSG:4326','EPSG:3857'),
@@ -301,6 +369,28 @@
       
       map.addOverlay(logo);
       map.getInteractions().extend([selectInteraction]);
+
+    //adding legend after 1s, because we want to upload layer with chapter colors first
+    setTimeout(function(){
+      let legend_element = $('#legend');
+      legend_element.append('<table><b>Legend - Chapters</b></table>');
+        for (item in chapterColor){
+          let field = $('<td></td>');
+          field.attr("id",item).css("backgroundColor",chapterColor[item])
+                              .css("opacity","0.6")
+                              .css("borderRadius","5px")
+                              .css("padding-bottom","2em")
+                              .css("padding-left","2em");
+                              
+          let row = $('<tr></tr>');
+          field.appendTo(row);
+          row.appendTo(legend_element);
+          html = $.parseHTML("<td>"+ item + "</td>");
+          row.append(html);
+          
+        }
+    },1000);
+
     </script>
   </body>
 </html>
