@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Erasmus Mundus Course Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/geomundus/EMA/master/ema.ico" type="image/x-icon"/>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <link href='/src/geomundus-compiled.css' rel='stylesheet' />
+</head>
+<body>
+<div id='interest'>
+<div id='interest-close'></div>
+</div>
+<div class = 'about' id='about'>
+    <div id = 'about-close'></div>
+    <div id='about-content'>
+        <div id='about-text'>
+          <div id = 'about-header'>Erasmus Mundus Course Web Map</div>
+          <p>The Erasmus Mundus Association is a professional network for Erasmus Mundus students and graduates. This webmap serves as a search tool for graduate programs by location and links prospective students to program webpages.</p>
+          <p>There are two modes: <b><i>Program</i></b> and <b><i>City</i></b>.
+            <ul>
+                <li>The <b><i>Program</i></b> mode allows one to filter the programs in mapview by program name and displays markers for all locations of an individual program.</li>
+                <li>The <b><i>City</i></b> displays programs and links to individual webpages by city.</li></ul>  
+                
+                The default filter for <b><i>Degree</i></b> and <b><i>Status</i></b> buttons were set up to <b><i>All</i></b>, which displays both Master and Doctorate programs.  
+              <ul>
+                  <li> The <b><i>Degree</i></b> button enables selection for <b><i>Masters</i></b>, <b><i>Doctorates</i></b> or <b><i>ALL</i></b> programs, and</li>
+                  <li>the <b><i>Status</i></b> button enables selection for <b><i>Discontinued</i></b> or <b><i>Ongoing</i></b> programs, whereas:
+                      <ul><li><b><i>Discontinued</i></b> is an indicator for programs which do not receive fundings by European Commision any longer, while</li>
+                          <li><b><i>Ongoing</i></b> are active programs for the ongoing year. Totally new programs funded by European Commision first time ever were marked with <b><i>NEW</i></b></li></ul></ul>
+              For more details, please see the list of all <a href='http://eacea.ec.europa.eu/erasmus_mundus/results_compendia/selected_projects_action_1_master_courses_en.php'>Erasmus Mundus Masters Courses</a>.</p>
+          <p>We hope that this program exploration tool will serve as a resource for students, faculty, and EMA staff.</p>
+          <p>Read more details at <a href='http://www.em-a.eu/'>the EMA website.</a></p>
+          <div id = 'about-map'>
+              <div id = 'about-map-button'>Back to the map</div></div>
+              <div id='about-credits'>
+            <br/>Map engine — <a target='_blank' href='https://www.mapbox.com/mapbox-gl-js/'>Mapbox GL JS</a>
+            <p>Development | Data Processing | Design: <a target='_blank' href="https://de.linkedin.com/in/dejanpopovic11">Dejan Popović</a>, <a target='_blank' href="https://www.linkedin.com/in/alexander-tedeschi-4a006938">Alexander Tedeschi</a>, <a target='_blank' href="https://www.linkedin.com/in/ruxandraaelenei/">Ruxandra Aelenei</a></p>
+            <br/>Contact | Feedback: geomundus[et]em-a[dot]eu, Dejan Popovic, GeoMundus Network</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id='home' onClick="window.location.reload()" title='Reload'></div>
+<div id='zoom-all' title='Extend Map View'></div>
+<div id='changeLayer'></div>
+<div id='menu'>
+  <input id='bright' type='radio' name='rtoggle' value='bright' checked='checked'>
+  <label for='bright'>basic</label><br>
+  <input id='dark' type='radio' name='rtoggle' value='dark'>
+  <label for='dark'>dark</label>
+</div>
+  <div id='map'>
+    <div id='program_title'>
+        <span id="myspan">TITLE</span>
+    </div>
+    <div id='about-linked' title='More Information'></div>
+  </div>
+  <div id ='banner'><img src="https://geomundus.github.io//EMA_med_map.jpg" alt="EMA"></div>
+  <div id='ema_title'><a href='http://www.em-a.eu/' style="color: white;" target='_blank'><img src="https://geomundus.github.io//EMA_med_map.jpg" alt="EMA" style="border-radius: 20px;"></a></div>
+<div class='map-overlay'>
+  <div class='header'>
+      <div id = 'modes'>
+        <div class = 'mode-selected' id='program'>Program</div>
+        <div class = 'mode' id='city'>City</div>
+      <div class="dropdown">
+      <button class="dropbtn" id="dropbtn">Degree</button>
+          <div class="dropdown-content" id="dropdown-content">
+            <div class="prg">
+              <input type='radio' id='radio1' name = 'program' value='EMJMD'>
+              <label for="radio1">Masters</label>
+            </div>
+            <div class="prg">
+              <input type='radio' id='radio2' name ='program' value='EMJD' >
+              <label for='radio2'>Doctorates</label>
+            </div>
+            <div class="prg">
+              <input type='radio' id='radio3' name = 'program' value = 'All'>
+              <label for='radio3'>All</label>
+            </div>
+          </div>
+        </div>
+      <div class="dropdown">
+      <button class="dropbtn" id="ongoing">Status</button>
+      <div class="dropdown-content" id="ongoing-content">
+      <div class="prg">
+          <input type='radio' id='radio4' name='status' value='0'>
+          <label for='radio4'>Discontinued</label>
+      </div>
+      <div class="prg">
+          <input type='radio' id='radio5' name='status' value='1'>
+          <label for='radio5'>Ongoing</label>
+      </div>
+      <div class="prg">
+          <input type='radio' id='radio6' name='status' value="All">
+          <label for='radio6'>All</label>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+    <fieldset>
+        <input id='feature-filter' type='text' placeholder='🔍 Filter results by program or abbreviation name' />
+    </fieldset>
+    <div id='feature-listing' class='listing'></div>
+</div>
+<script type= "text/javascript" src="/src/geomundus-compiled.js"></script>
+  <script type="text/javascript">
+  //  Yandex.Metrika counter 
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter42213174 = new Ya.Metrika({
+                    id:42213174,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/42213174" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  </body>
+</html>
